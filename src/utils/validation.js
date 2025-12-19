@@ -71,13 +71,20 @@ function validateEmail(email) {
 function sanitizeInput(input) {
   if (typeof input === 'string') {
     // Remove potentially harmful characters and protocols
-    let sanitized = input
-      .replace(/[<>]/g, '') // Remove angle brackets
-      .replace(/(javascript|data|vbscript):/gi, '') // Remove dangerous protocols
-      .replace(/on\w+\s*=/gi, ''); // Remove inline event handlers with whitespace
+    // Use a comprehensive single-pass approach that CodeQL can verify
+    let sanitized = input;
     
-    // Second pass to catch any remaining event handlers
-    sanitized = sanitized.replace(/on\w+\s*=/gi, '');
+    // Remove all occurrences of dangerous event handlers (multiple passes)
+    do {
+      const before = sanitized;
+      sanitized = sanitized
+        .replace(/[<>]/g, '') // Remove angle brackets
+        .replace(/(javascript|data|vbscript):/gi, '') // Remove dangerous protocols
+        .replace(/on\w+\s*=/gi, ''); // Remove inline event handlers
+      
+      // Break if no more changes were made
+      if (before === sanitized) break;
+    } while (true);
     
     return sanitized.trim();
   }
