@@ -33,7 +33,7 @@ export class WhatsAppAdapter implements ChannelAdapter {
     try {
       // In production, use Twilio SDK
       // For now, simulate the API call
-      const twilio = require('twilio');
+      const { default: twilio } = await import('twilio');
       const client = twilio(accountSid, authToken);
       
       const result = await client.messages.create({

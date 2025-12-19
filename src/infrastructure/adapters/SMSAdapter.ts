@@ -27,7 +27,7 @@ export class SMSAdapter implements ChannelAdapter {
 
     try {
       // In production, use Twilio SDK
-      const twilio = require('twilio');
+      const { default: twilio } = await import('twilio');
       const client = twilio(accountSid, authToken);
       
       const result = await client.messages.create({
