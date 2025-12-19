@@ -4,7 +4,7 @@ import schedulerService from '../services/SchedulerService';
 const router = express.Router();
 
 // Get scheduler status
-router.get('/status', (req: Request, res: Response) => {
+router.get('/status', (_req: Request, res: Response) => {
   try {
     const status = schedulerService.getStatus();
     res.json({ success: true, status });
@@ -18,7 +18,7 @@ router.get('/status', (req: Request, res: Response) => {
 });
 
 // Process pending jobs immediately
-router.post('/process', async (req: Request, res: Response) => {
+router.post('/process', async (_req: Request, res: Response) => {
   try {
     await schedulerService.processNow();
     res.json({ success: true, message: 'Jobs processed successfully' });

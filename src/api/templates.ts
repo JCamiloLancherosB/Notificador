@@ -4,7 +4,7 @@ import templateService from '../services/TemplateService';
 const router = express.Router();
 
 // Get all templates
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (_req: Request, res: Response) => {
   try {
     const templates = templateService.getAllTemplates();
     res.json({ success: true, templates });
@@ -18,12 +18,13 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // Get template by ID
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', (req: Request, res: Response): void => {
   try {
     const template = templateService.getTemplate(req.params.id);
     
     if (!template) {
-      return res.status(404).json({ success: false, error: 'Template not found' });
+      res.status(404).json({ success: false, error: 'Template not found' });
+      return;
     }
     
     res.json({ success: true, template });
@@ -37,12 +38,13 @@ router.get('/:id', (req: Request, res: Response) => {
 });
 
 // Get templates by channel
-router.get('/channel/:channel', (req: Request, res: Response) => {
+router.get('/channel/:channel', (req: Request, res: Response): void => {
   try {
     const channel = req.params.channel as 'email' | 'sms' | 'whatsapp';
     
     if (!['email', 'sms', 'whatsapp'].includes(channel)) {
-      return res.status(400).json({ success: false, error: 'Invalid channel' });
+      res.status(400).json({ success: false, error: 'Invalid channel' });
+      return;
     }
     
     const templates = templateService.getTemplatesByChannel(channel);
@@ -57,12 +59,13 @@ router.get('/channel/:channel', (req: Request, res: Response) => {
 });
 
 // Render template preview
-router.post('/:id/preview', (req: Request, res: Response) => {
+router.post('/:id/preview', (req: Request, res: Response): void => {
   try {
     const { variables } = req.body;
     
     if (!variables || typeof variables !== 'object') {
-      return res.status(400).json({ success: false, error: 'Variables object required' });
+      res.status(400).json({ success: false, error: 'Variables object required' });
+      return;
     }
     
     const rendered = templateService.renderTemplate(req.params.id, variables);

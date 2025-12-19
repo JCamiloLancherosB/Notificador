@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import analyticsService from '../services/AnalyticsService';
-import { validateRequest, analyticsFilterSchema } from '../utils/validation';
 
 const router = express.Router();
 
@@ -53,12 +52,13 @@ router.get('/history', (req: Request, res: Response) => {
 });
 
 // Get job by ID
-router.get('/job/:id', (req: Request, res: Response) => {
+router.get('/job/:id', (req: Request, res: Response): void => {
   try {
     const job = analyticsService.getJobById(req.params.id);
     
     if (!job) {
-      return res.status(404).json({ success: false, error: 'Job not found' });
+      res.status(404).json({ success: false, error: 'Job not found' });
+      return;
     }
     
     res.json({ success: true, job });
@@ -87,7 +87,7 @@ router.get('/activity/recent', (req: Request, res: Response) => {
 });
 
 // Get channel performance
-router.get('/performance/channels', (req: Request, res: Response) => {
+router.get('/performance/channels', (_req: Request, res: Response) => {
   try {
     const performance = analyticsService.getChannelPerformance();
     res.json({ success: true, performance });

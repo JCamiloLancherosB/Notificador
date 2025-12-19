@@ -1,4 +1,4 @@
-import { EmailAdapter } from '../../infrastructure/adapters/EmailAdapter';
+import { EmailAdapter } from '../EmailAdapter';
 
 describe('EmailAdapter', () => {
   let adapter: EmailAdapter;

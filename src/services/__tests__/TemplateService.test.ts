@@ -1,5 +1,5 @@
-import templateService from '../services/TemplateService';
-import { NotificationChannel, TemplateType } from '../domain/types';
+import templateService from '../TemplateService';
+import { NotificationChannel, TemplateType } from '../../domain/types';
 
 describe('TemplateService', () => {
   describe('getTemplate', () => {
@@ -27,7 +27,7 @@ describe('TemplateService', () => {
     it('should return templates for email channel', () => {
       const templates = templateService.getTemplatesByChannel('email' as NotificationChannel);
       expect(templates.length).toBeGreaterThan(0);
-      templates.forEach(t => {
+      templates.forEach((t: { channel: string }) => {
         expect(t.channel).toBe('email');
       });
     });
@@ -35,7 +35,7 @@ describe('TemplateService', () => {
     it('should return templates for whatsapp channel', () => {
       const templates = templateService.getTemplatesByChannel('whatsapp' as NotificationChannel);
       expect(templates.length).toBeGreaterThan(0);
-      templates.forEach(t => {
+      templates.forEach((t: { channel: string }) => {
         expect(t.channel).toBe('whatsapp');
       });
     });
@@ -45,7 +45,7 @@ describe('TemplateService', () => {
     it('should return templates by type', () => {
       const templates = templateService.getTemplatesByType('order_confirmation' as TemplateType);
       expect(templates.length).toBeGreaterThan(0);
-      templates.forEach(t => {
+      templates.forEach((t: { type: string }) => {
         expect(t.type).toBe('order_confirmation');
       });
     });

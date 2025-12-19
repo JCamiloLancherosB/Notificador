@@ -1,4 +1,4 @@
-import { WhatsAppAdapter } from '../../infrastructure/adapters/WhatsAppAdapter';
+import { WhatsAppAdapter } from '../WhatsAppAdapter';
 
 describe('WhatsAppAdapter', () => {
   let adapter: WhatsAppAdapter;

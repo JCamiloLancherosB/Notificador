@@ -6,7 +6,7 @@ import { validateRequest, recipientSchema, optInUpdateSchema } from '../utils/va
 const router = express.Router();
 
 // Get all recipients
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (_req: Request, res: Response): void => {
   try {
     const recipients = databaseService.getAllRecipients();
     res.json({ success: true, recipients });
@@ -20,12 +20,13 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // Get recipient by ID
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', (req: Request, res: Response): void => {
   try {
     const recipient = databaseService.getRecipient(req.params.id);
     
     if (!recipient) {
-      return res.status(404).json({ success: false, error: 'Recipient not found' });
+      res.status(404).json({ success: false, error: 'Recipient not found' });
+      return;
     }
     
     res.json({ success: true, recipient });
@@ -39,12 +40,13 @@ router.get('/:id', (req: Request, res: Response) => {
 });
 
 // Create or update recipient
-router.post('/', (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response): void => {
   try {
     const { value, error } = validateRequest(recipientSchema, req.body);
     
     if (error) {
-      return res.status(400).json({ success: false, error });
+      res.status(400).json({ success: false, error });
+      return;
     }
 
     databaseService.saveRecipient(value);
@@ -59,12 +61,13 @@ router.post('/', (req: Request, res: Response) => {
 });
 
 // Update opt-in preferences
-router.patch('/:id/opt-ins', (req: Request, res: Response) => {
+router.patch('/:id/opt-ins', (req: Request, res: Response): void => {
   try {
     const { value, error } = validateRequest(optInUpdateSchema, req.body);
     
     if (error) {
-      return res.status(400).json({ success: false, error });
+      res.status(400).json({ success: false, error });
+      return;
     }
 
     optInService.updateAllOptIns(req.params.id, value);
@@ -81,12 +84,13 @@ router.patch('/:id/opt-ins', (req: Request, res: Response) => {
 });
 
 // Get opt-in status
-router.get('/:id/opt-ins', (req: Request, res: Response) => {
+router.get('/:id/opt-ins', (req: Request, res: Response): void => {
   try {
     const optIns = optInService.getOptInStatus(req.params.id);
     
     if (!optIns) {
-      return res.status(404).json({ success: false, error: 'Recipient not found' });
+      res.status(404).json({ success: false, error: 'Recipient not found' });
+      return;
     }
     
     res.json({ success: true, optIns });

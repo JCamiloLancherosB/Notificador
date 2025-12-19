@@ -3,7 +3,6 @@ import {
   BulkNotificationRequest, 
   NotificationJob, 
   NotificationChannel,
-  Recipient,
 } from '../domain/types';
 import templateService from './TemplateService';
 import optInService from './OptInService';

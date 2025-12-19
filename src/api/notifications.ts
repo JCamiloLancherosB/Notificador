@@ -10,12 +10,13 @@ import {
 const router = express.Router();
 
 // Send single notification
-router.post('/send', async (req: Request, res: Response) => {
+router.post('/send', async (req: Request, res: Response): Promise<void> => {
   try {
     const { value, error } = validateRequest(notificationRequestSchema, req.body);
     
     if (error) {
-      return res.status(400).json({ success: false, error });
+      res.status(400).json({ success: false, error });
+      return;
     }
 
     // Sanitize variables
@@ -34,12 +35,13 @@ router.post('/send', async (req: Request, res: Response) => {
 });
 
 // Send bulk notifications
-router.post('/send-bulk', async (req: Request, res: Response) => {
+router.post('/send-bulk', async (req: Request, res: Response): Promise<void> => {
   try {
     const { value, error } = validateRequest(bulkNotificationRequestSchema, req.body);
     
     if (error) {
-      return res.status(400).json({ success: false, error });
+      res.status(400).json({ success: false, error });
+      return;
     }
 
     // Sanitize variables

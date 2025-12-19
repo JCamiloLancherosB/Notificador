@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Request logging
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} ${req.method} ${req.path}`);
+app.use((_req, _res, next) => {
+  console.log(`${new Date().toISOString()} ${_req.method} ${_req.path}`);
   next();
 });
 
@@ -32,7 +32,7 @@ app.use('/api/recipients', recipientsRouter);
 app.use('/api/scheduler', schedulerRouter);
 
 // Health check
-app.get('/api/health', (req: Request, res: Response) => {
+app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
@@ -45,13 +45,13 @@ if (config.server.nodeEnv === 'production') {
   const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
   app.use(express.static(frontendPath));
   
-  app.get('*', (req: Request, res: Response) => {
+  app.get('*', (_req: Request, res: Response) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
   });
 }
 
 // Error handling
-app.use((err: Error, req: Request, res: Response, next: any) => {
+app.use((err: Error, _req: Request, res: Response, _next: unknown) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ 
     success: false, 

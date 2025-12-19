@@ -1,4 +1,4 @@
-import { SMSAdapter } from '../../infrastructure/adapters/SMSAdapter';
+import { SMSAdapter } from '../SMSAdapter';
 
 describe('SMSAdapter', () => {
   let adapter: SMSAdapter;
