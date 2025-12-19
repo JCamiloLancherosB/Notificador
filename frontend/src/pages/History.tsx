@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getNotificationHistory } from '../services/api';
-import type { NotificationJob, NotificationChannel, NotificationStatus } from '../types';
+import type { NotificationJob, NotificationStatus } from '../types';
 import { format } from 'date-fns';
 
 export default function History() {

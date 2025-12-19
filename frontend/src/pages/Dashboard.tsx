@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getAnalyticsSummary, getRecentActivity, getChannelPerformance } from '../services/api';
+import { getAnalyticsSummary, getChannelPerformance } from '../services/api';
 import type { AnalyticsSummary } from '../types';
 
 export default function Dashboard() {
   const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
-  const [activity, setActivity] = useState<any>(null);
   const [performance, setPerformance] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,13 +14,11 @@ export default function Dashboard() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const [summaryData, activityData, performanceData] = await Promise.all([
+      const [summaryData, performanceData] = await Promise.all([
         getAnalyticsSummary(),
-        getRecentActivity(7),
         getChannelPerformance(),
       ]);
       setSummary(summaryData);
-      setActivity(activityData);
       setPerformance(performanceData);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
