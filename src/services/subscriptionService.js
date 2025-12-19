@@ -3,8 +3,8 @@ const db = require('../utils/database');
 class SubscriptionService {
   async checkOptIn(userId, channel, contact) {
     const subscriptions = await db.query(
-      'SELECT * FROM subscriptions WHERE user_id = ? AND channel = ? AND contact = ?',
-      [userId, channel, contact]
+      'SELECT * FROM subscriptions WHERE user_id = ? AND channel = ?',
+      [userId, channel]
     );
 
     if (subscriptions.length === 0) {

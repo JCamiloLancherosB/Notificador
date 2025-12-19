@@ -100,7 +100,9 @@ class TemplateService {
   replaceVariables(content, variables) {
     let result = content;
     for (const [key, value] of Object.entries(variables)) {
-      const placeholder = `{{${key}}}`;
+      // Escape special regex characters in the key
+      const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const placeholder = `{{${escapedKey}}}`;
       result = result.replace(new RegExp(placeholder, 'g'), value);
     }
     return result;

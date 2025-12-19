@@ -1,6 +1,10 @@
 // Configuration
 const API_BASE_URL = '/api';
-const API_KEY = 'test-api-key-12345'; // Use configured API key
+// Get API key from localStorage or prompt user
+const API_KEY = localStorage.getItem('techaura_api_key') || prompt('Enter API Key:') || '';
+if (API_KEY && !localStorage.getItem('techaura_api_key')) {
+  localStorage.setItem('techaura_api_key', API_KEY);
+}
 
 // State
 let currentTab = 'dashboard';

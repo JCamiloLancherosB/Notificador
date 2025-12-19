@@ -204,21 +204,26 @@ class Database {
       
       if (sqlLower.includes('where user_id = ? and channel = ?') && params.length >= 2) {
         results = results.filter(s => s.user_id === params[0] && s.channel === params[1]);
+      } else if (sqlLower.includes('where user_id = ?') && params.length >= 1) {
+        results = results.filter(s => s.user_id === params[0]);
       }
       
       return results;
     } else if (sqlLower.includes('from notifications')) {
       let results = [...this.inMemoryData.notifications];
       
-      // Apply filters based on parameters
-      if (params.length > 0) {
-        // This is a simplified version - in production, parse the WHERE clause properly
-        results = results.filter(n => {
-          let match = true;
-          if (sqlLower.includes('status = ?')) match = match && n.status === params[0];
-          if (sqlLower.includes('channel = ?')) match = match && n.channel === params[0];
-          return match;
-        });
+      // Apply filters based on query
+      if (sqlLower.includes('where status = ? and scheduled_at <= ?') && params.length >= 2) {
+        results = results.filter(n => n.status === params[0] && new Date(n.scheduled_at) <= params[1]);
+      } else {
+        // Simple filtering for other queries
+        let paramIndex = 0;
+        if (sqlLower.includes('channel = ?') && params.length > paramIndex) {
+          results = results.filter(n => n.channel === params[paramIndex++]);
+        }
+        if (sqlLower.includes('status = ?') && params.length > paramIndex) {
+          results = results.filter(n => n.status === params[paramIndex++]);
+        }
       }
       
       // Sort by created_at descending
