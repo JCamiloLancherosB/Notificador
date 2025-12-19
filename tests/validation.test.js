@@ -33,7 +33,10 @@ describe('Validation Utils', () => {
     test('should remove dangerous characters', () => {
       expect(sanitizeInput('<script>alert("xss")</script>')).toBe('scriptalert("xss")/script');
       expect(sanitizeInput('javascript:alert(1)')).toBe('alert(1)');
+      expect(sanitizeInput('data:text/html,<script>alert(1)</script>')).toBe('text/html,scriptalert(1)/script');
+      expect(sanitizeInput('vbscript:alert(1)')).toBe('alert(1)');
       expect(sanitizeInput('onclick=alert(1)')).toBe('alert(1)');
+      expect(sanitizeInput('onclick =alert(1)')).toBe('alert(1)');
     });
 
     test('should preserve safe content', () => {

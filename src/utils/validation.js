@@ -70,11 +70,11 @@ function validateEmail(email) {
 
 function sanitizeInput(input) {
   if (typeof input === 'string') {
-    // Remove potentially harmful characters
+    // Remove potentially harmful characters and protocols
     return input
       .replace(/[<>]/g, '') // Remove angle brackets
-      .replace(/javascript:/gi, '') // Remove javascript: protocol
-      .replace(/on\w+=/gi, '') // Remove inline event handlers
+      .replace(/(javascript|data|vbscript):/gi, '') // Remove dangerous protocols
+      .replace(/on\w+\s*=/gi, '') // Remove inline event handlers with whitespace
       .trim();
   }
   return input;
