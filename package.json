@@ -1,0 +1,41 @@
+{
+  "name": "notificador",
+  "version": "1.0.0",
+  "description": "Multi-channel notification service for Techaura supporting WhatsApp, SMS, and Email",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "jest --verbose",
+    "test:watch": "jest --watch",
+    "seed": "node scripts/seed.js"
+  },
+  "keywords": [
+    "notifications",
+    "whatsapp",
+    "sms",
+    "email",
+    "twilio",
+    "sendgrid"
+  ],
+  "author": "Techaura",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.22.1",
+    "express-rate-limit": "^8.2.1",
+    "joi": "^18.0.2",
+    "mysql2": "^3.16.0",
+    "nodemailer": "^7.0.11",
+    "twilio": "^5.11.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  }
+}

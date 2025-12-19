@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techaura Notification Service</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>🚀 Techaura Notification Service</h1>
+      <p class="subtitle">Multi-Channel Notification Dashboard</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
+      <button class="tab-btn" data-tab="send">📤 Send Notification</button>
+      <button class="tab-btn" data-tab="templates">📝 Templates</button>
+      <button class="tab-btn" data-tab="subscriptions">👥 Subscriptions</button>
+      <button class="tab-btn" data-tab="history">📜 History</button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-content active">
+      <h2>Analytics Dashboard</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total Notifications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="stat-sent">0</div>
+          <div class="stat-label">Sent</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">❌</div>
+          <div class="stat-value" id="stat-failed">0</div>
+          <div class="stat-label">Failed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-value" id="stat-pending">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+      </div>
+
+      <div class="channels-grid">
+        <div class="channel-card">
+          <h3>📱 WhatsApp</h3>
+          <div class="channel-stats">
+            <div>Total: <strong id="channel-whatsapp-total">0</strong></div>
+            <div>Sent: <strong id="channel-whatsapp-sent">0</strong></div>
+            <div>Failed: <strong id="channel-whatsapp-failed">0</strong></div>
+          </div>
+        </div>
+        <div class="channel-card">
+          <h3>📨 SMS</h3>
+          <div class="channel-stats">
+            <div>Total: <strong id="channel-sms-total">0</strong></div>
+            <div>Sent: <strong id="channel-sms-sent">0</strong></div>
+            <div>Failed: <strong id="channel-sms-failed">0</strong></div>
+          </div>
+        </div>
+        <div class="channel-card">
+          <h3>📧 Email</h3>
+          <div class="channel-stats">
+            <div>Total: <strong id="channel-email-total">0</strong></div>
+            <div>Sent: <strong id="channel-email-sent">0</strong></div>
+            <div>Failed: <strong id="channel-email-failed">0</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <div id="recent-activity-list" class="activity-list">
+          <p class="text-muted">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Send Notification Tab -->
+    <div id="send" class="tab-content">
+      <h2>Send Notification</h2>
+      
+      <form id="send-form" class="form">
+        <div class="form-group">
+          <label>Template</label>
+          <select id="send-template" required>
+            <option value="">Select a template...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Channels</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="channel" value="whatsapp"> WhatsApp</label>
+            <label><input type="checkbox" name="channel" value="sms"> SMS</label>
+            <label><input type="checkbox" name="channel" value="email"> Email</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>User ID</label>
+          <input type="text" id="send-userId" placeholder="e.g., user123" required>
+        </div>
+
+        <div class="form-group">
+          <label>WhatsApp Number</label>
+          <input type="text" id="send-whatsapp" placeholder="e.g., 573001234567">
+        </div>
+
+        <div class="form-group">
+          <label>SMS Number</label>
+          <input type="text" id="send-sms" placeholder="e.g., 573001234567">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="send-email" placeholder="e.g., user@example.com">
+        </div>
+
+        <div id="variables-container" class="variables-container">
+          <!-- Dynamic variables will be inserted here -->
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="send-schedule">
+            Schedule for later
+          </label>
+        </div>
+
+        <div id="schedule-container" class="form-group" style="display: none;">
+          <label>Schedule Date & Time</label>
+          <input type="datetime-local" id="send-scheduleTime">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Notification</button>
+      </form>
+
+      <div id="send-result" class="result-box" style="display: none;"></div>
+    </div>
+
+    <!-- Templates Tab -->
+    <div id="templates" class="tab-content">
+      <h2>Templates</h2>
+      
+      <button class="btn btn-primary" id="create-template-btn">Create New Template</button>
+
+      <div id="templates-list" class="templates-list">
+        <p class="text-muted">Loading templates...</p>
+      </div>
+
+      <!-- Create/Edit Template Modal -->
+      <div id="template-modal" class="modal">
+        <div class="modal-content">
+          <span class="modal-close">&times;</span>
+          <h3 id="template-modal-title">Create Template</h3>
+          
+          <form id="template-form" class="form">
+            <input type="hidden" id="template-id">
+            
+            <div class="form-group">
+              <label>Name *</label>
+              <input type="text" id="template-name" required>
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="template-description" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Supported Channels *</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" name="template-channel" value="whatsapp"> WhatsApp</label>
+                <label><input type="checkbox" name="template-channel" value="sms"> SMS</label>
+                <label><input type="checkbox" name="template-channel" value="email"> Email</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>WhatsApp Content</label>
+              <textarea id="template-whatsapp" rows="4" placeholder="Use {{variableName}} for variables"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>SMS Content</label>
+              <textarea id="template-sms" rows="3" placeholder="Use {{variableName}} for variables"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Email Subject</label>
+              <input type="text" id="template-email-subject" placeholder="Use {{variableName}} for variables">
+            </div>
+
+            <div class="form-group">
+              <label>Email Body (HTML)</label>
+              <textarea id="template-email-body" rows="6" placeholder="Use {{variableName}} for variables"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Variables (comma-separated)</label>
+              <input type="text" id="template-variables" placeholder="e.g., customerName, orderId, amount">
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="template-active" checked>
+                Active
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Template</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subscriptions Tab -->
+    <div id="subscriptions" class="tab-content">
+      <h2>Subscriptions</h2>
+
+      <div class="opt-in-stats">
+        <h3>Opt-in Statistics</h3>
+        <div id="optin-stats" class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="optin-total">0</div>
+            <div class="stat-label">Total Subscriptions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="optin-in">0</div>
+            <div class="stat-label">Opted In</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="optin-out">0</div>
+            <div class="stat-label">Opted Out</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Manage Subscription</h3>
+      <form id="subscription-form" class="form">
+        <div class="form-group">
+          <label>User ID *</label>
+          <input type="text" id="sub-userId" required>
+        </div>
+
+        <div class="form-group">
+          <label>Channel *</label>
+          <select id="sub-channel" required>
+            <option value="">Select channel...</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="sms">SMS</option>
+            <option value="email">Email</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Contact *</label>
+          <input type="text" id="sub-contact" placeholder="Phone number or email" required>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="sub-optedIn" checked>
+            Opted In
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Subscription</button>
+      </form>
+
+      <div id="subscription-result" class="result-box" style="display: none;"></div>
+
+      <h3>All Subscriptions</h3>
+      <div id="subscriptions-list" class="subscriptions-list">
+        <p class="text-muted">Loading subscriptions...</p>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="history" class="tab-content">
+      <h2>Notification History</h2>
+
+      <div class="filters">
+        <select id="filter-channel">
+          <option value="">All Channels</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="sms">SMS</option>
+          <option value="email">Email</option>
+        </select>
+
+        <select id="filter-status">
+          <option value="">All Statuses</option>
+          <option value="sent">Sent</option>
+          <option value="failed">Failed</option>
+          <option value="pending">Pending</option>
+          <option value="scheduled">Scheduled</option>
+        </select>
+
+        <input type="text" id="filter-recipient" placeholder="Filter by recipient ID">
+
+        <button class="btn btn-primary" id="apply-filters">Apply Filters</button>
+        <button class="btn btn-secondary" id="clear-filters">Clear</button>
+      </div>
+
+      <div id="history-list" class="history-list">
+        <p class="text-muted">Loading history...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
